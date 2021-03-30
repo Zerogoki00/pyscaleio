@@ -493,6 +493,10 @@ class Volume(MutableResource):
         return ExportsInfo(self.get("mappedSdcInfo"))
 
     @property
+    def snap_group(self):
+        return self.get("consistencyGroupId")
+
+    @property
     def path(self):
         device_name = config.VOLUME_NAME.format(
             system_id=self._client.system["id"],
@@ -614,3 +618,30 @@ class Volume(MutableResource):
         """
 
         return super(Volume, self).delete({"removeMode": mode})
+
+
+class ConsistencyGroup:
+    """Consistency group model"""
+
+    @pyscaleio.inject
+    @classmethod
+    def remove(cls, client, group_id):
+        """Removes consistency group
+        :param group_id: consistency group id
+        """
+
+        result = client.system.perform("removeConsistencyGroupSnapshots",
+                                       {"snapGroupId": group_id})
+
+        return result["numberOfVolumes"]
+
+    @pyscaleio.inject
+    def __init__(self, client, volume_group):
+        """Creates consistency group of snapshots
+        :param volume_group: list of volume ids
+        """
+
+        snapshot_defs = [{"volumeId": vol} for vol in volume_group]
+        result = client.system.perform("snapshotVolumes", {"snapshotDefs": snapshot_defs})
+        self.id = result["snapshotGroupId"]
+        self.snapshots = [Volume(v) for v in result["volumeIdList"]]
