@@ -24,7 +24,7 @@ Python library that provides convenient way to interact with ScaleIO/VxFlex REST
 
 Name:    python-scaleio
 Version: 0.1.7
-Release: 1.CROC2TEST%{?dist}
+Release: 1.CROC2TEST2ZZZ%{?dist}
 Summary: ScaleIO/VxFlex API client
 
 Group:   Development/Tools
@@ -49,7 +49,7 @@ Requires: python-six
 
 
 %if 0%{with python3}
-%package -n python%{python3_pkgversion}-scaleio
+%package -n python3-scaleio
 Summary: ScaleIO API client
 Requires: python36-requests >= 2.3
 Requires: python36-object-validator >= 0.1.4
@@ -61,7 +61,7 @@ BuildRequires: python%{python3_pkgversion}-setuptools
 BuildRequires: python36-six
 BuildRequires: python36-pbr
 
-%description -n python%{python3_pkgversion}-scaleio %{project_description}
+%description -n python3-scaleio %{project_description}
 %endif  # with python3
 
 
@@ -116,7 +116,7 @@ export PBR_VERSION=%version
 %doc ChangeLog README.rst
 
 %if %{with python3}
-%files -n python%{python3_pkgversion}-scaleio
+%files -n python3-scaleio
 %defattr(-,root,root,-)
 %{python3_sitelib}/pyscaleio
 %{python3_sitelib}/pyscaleio-%{version}-*.egg-info
